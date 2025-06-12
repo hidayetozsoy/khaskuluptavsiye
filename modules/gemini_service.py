@@ -8,7 +8,7 @@ class GeminiService:
 
     def get_club_recommendation(self, isim, soyisim, bolum, hobi, ilgi):
         mesaj = f"""
-        Aşağıdaki öğrenci için sadece şu kulüplerden en uygun olan 3 tanesini öner. Her kulübü yeni satırda yaz. Yorum ekleme:
+        Aşağıdaki öğrenci için sadece şu kulüplerden en uygun olan 5 tanesini öner. Her kulübü yeni satırda yaz. Yorum ekleme:
         {', '.join(KULUP_LISTESI)}
 
         Öğrenci bilgileri:

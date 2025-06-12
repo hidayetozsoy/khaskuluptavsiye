@@ -1,23 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
-from flask_mail import Mail, Message
 from modules.gemini_service import GeminiService
+from modules.email_service import EmailService
 from modules.config import KULUP_LISTESI
 import os
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Generate a secure random key
 
-# Flask-Mail configuration for Gmail
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'khaskuluptavsiye@gmail.com'  # Replace with your Gmail address
-app.config['MAIL_PASSWORD'] = 'zxqv nksu wolp uawz'      # Replace with your Gmail App Password
-app.config['MAIL_DEFAULT_SENDER'] = 'khaskuluptavsiye@gmail.com'  # Replace with your Gmail address
-
-# Initialize Flask-Mail
-mail = Mail(app)
+# Initialize services
 gemini_service = GeminiService()
+email_service = EmailService(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -82,29 +74,37 @@ def send_email():
                 'message': 'Lütfen e-posta adresinizi girin.'
             })
 
-        msg = Message(
-            subject=f'{club} Kulübüne Hoş Geldiniz',
-            recipients=[email],
-            body=f"""
-Sayın {isim} {soyisim},
-
-{club} kulübümüze hoş geldiniz! Başvurunuz alınmıştır.
-
-En kısa sürede sizinle iletişime geçeceğiz.
-
-Saygılarımızla,
-{club}
-"""
-        )
-        mail.send(msg)
+        success, message = email_service.send_club_application(email, club, isim, soyisim)
         return jsonify({
-            'success': True,
-            'message': 'Başvurunuz başarıyla alındı!'
+            'success': success,
+            'message': message
         })
     except Exception as e:
         return jsonify({
             'success': False,
             'message': f'Başvuru gönderilirken bir hata oluştu: {str(e)}'
+        })
+
+@app.route('/suggest-club', methods=['POST'])
+def suggest_club():
+    try:
+        club_name = request.form.get('club_name')
+        
+        if not club_name:
+            return jsonify({
+                'success': False,
+                'message': 'Lütfen bir kulüp adı girin.'
+            })
+
+        success, message = email_service.send_club_suggestion(club_name)
+        return jsonify({
+            'success': success,
+            'message': message
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Kulüp önerisi gönderilirken bir hata oluştu: {str(e)}'
         })
 
 if __name__ == '__main__':

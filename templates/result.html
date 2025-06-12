@@ -42,7 +42,10 @@
                             </div>
                             {% endfor %}
                         </div>
-                        <div class="text-center back-button mt-4">
+                        <div class="text-center mt-4">
+                            <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#suggestionModal">
+                                Kulüp Önerisinde Bulun
+                            </button>
                             <a href="/" class="btn btn-primary">Yeni Tavsiye Al</a>
                         </div>
                     </div>
@@ -76,6 +79,30 @@
         </div>
     </div>
 
+    <!-- Suggestion Modal -->
+    <div class="modal fade" id="suggestionModal" tabindex="-1" aria-labelledby="suggestionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="suggestionModalLabel">Kulüp Önerisi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="suggestionForm" method="POST" action="{{ url_for('suggest_club') }}">
+                        <div class="mb-3">
+                            <label for="clubName" class="form-label">Önerdiğiniz Kulüp Adı</label>
+                            <input type="text" class="form-control" id="clubName" name="club_name" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" form="suggestionForm" class="btn btn-success">Öneriyi Gönder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -83,6 +110,7 @@
             const selectedClubInput = document.getElementById('selectedClub');
             const emailModal = document.getElementById('emailModal');
             const emailForm = document.getElementById('emailForm');
+            const suggestionForm = document.getElementById('suggestionForm');
             
             applyButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -91,7 +119,7 @@
                 });
             });
 
-            // Handle form submission
+            // Handle email form submission
             emailForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const formData = new FormData(this);
@@ -118,6 +146,49 @@
                         
                         // Clear the form
                         emailForm.reset();
+                    } else {
+                        // Show error message
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+                        alertDiv.innerHTML = `
+                            ${data.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        `;
+                        document.querySelector('.container').insertBefore(alertDiv, document.querySelector('.page-title'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+
+            // Handle suggestion form submission
+            suggestionForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Close the modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('suggestionModal'));
+                        modal.hide();
+                        
+                        // Show success message
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = 'alert alert-success alert-dismissible fade show';
+                        alertDiv.innerHTML = `
+                            ${data.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        `;
+                        document.querySelector('.container').insertBefore(alertDiv, document.querySelector('.page-title'));
+                        
+                        // Clear the form
+                        suggestionForm.reset();
                     } else {
                         // Show error message
                         const alertDiv = document.createElement('div');
