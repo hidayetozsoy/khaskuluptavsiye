@@ -77,6 +77,6 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosy
 
 ## İletişim
 
-Proje Sahibi - [@hidayetozsoy](https://github.com/hidayetozsoy) - [@elifff747](https://github.com/elifff747)) - [@meltemkrb](https://github.com/meltemkrb)
+Proje Sahibi - [@hidayetozsoy](https://github.com/hidayetozsoy) - [@elifff747](https://github.com/elifff747) - [@meltemkrb](https://github.com/meltemkrb)
 
 Proje Linki: [https://github.com/hidayetozsoy/khaskuluptavsiye](https://github.com/hidayetozsoy/khaskuluptavsiye) 
