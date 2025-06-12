@@ -1,6 +1,6 @@
-# Khas Kulüp Tavsiye
+# Kadir Has Üniversitesi Kulüp Tavsiye Sistemi
 
-Khas Kulüp Tavsiye, Koç Üniversitesi öğrencilerine kişiselleştirilmiş kulüp önerileri sunan bir web uygulamasıdır. Google'ın Gemini AI modelini kullanarak, öğrencilerin ilgi alanları, hobileri ve bölümlerine göre en uygun kulüpleri önerir.
+Kadir Has Üniversitesi Kulüp Tavsiye Sistemi, Kadir Has Üniversitesi öğrencilerine kişiselleştirilmiş kulüp önerileri sunan bir web uygulamasıdır. Google'ın Gemini AI modelini kullanarak, öğrencilerin ilgi alanları, hobileri ve bölümlerine göre en uygun kulüpleri önerir.
 
 ## Özellikler
 
@@ -77,6 +77,6 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosy
 
 ## İletişim
 
-Proje Sahibi - [@your-username](https://github.com/your-username)
+Proje Sahibi - [@hidayetozsoy](https://github.com/hidayetozsoy) - [@hidayetozsoy](https://github.com/hidayetozsoy) - [@hidayetozsoy](https://github.com/hidayetozsoy)
 
-Proje Linki: [https://github.com/your-username/khaskuluptavsiye](https://github.com/your-username/khaskuluptavsiye) 
+Proje Linki: [https://github.com/hidayetozsoy/khaskuluptavsiye](https://github.com/your-username/khaskuluptavsiye) 
