@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_mail import Mail, Message
 from modules.gemini_service import GeminiService
 from modules.config import KULUP_LISTESI
@@ -67,16 +67,20 @@ def send_email():
     soyisim = session.get('soyisim')
     
     if not all([kulup_onerisi, isim, soyisim]):
-        flash("Oturum bilgileri eksik. Lütfen tekrar deneyin.", 'error')
-        return redirect(url_for('home'))
+        return jsonify({
+            'success': False,
+            'message': 'Oturum bilgileri eksik. Lütfen tekrar deneyin.'
+        })
 
     try:
         email = request.form.get('email')
         club = request.form.get('club')
 
         if not email or not club:
-            flash("Lütfen e-posta adresinizi girin.", 'error')
-            return redirect(url_for('result'))
+            return jsonify({
+                'success': False,
+                'message': 'Lütfen e-posta adresinizi girin.'
+            })
 
         msg = Message(
             subject=f'{club} Kulübüne Hoş Geldiniz',
@@ -93,11 +97,15 @@ Saygılarımızla,
 """
         )
         mail.send(msg)
-        flash('Başvurunuz başarıyla alındı!', 'success')
+        return jsonify({
+            'success': True,
+            'message': 'Başvurunuz başarıyla alındı!'
+        })
     except Exception as e:
-        flash(f"Başvuru gönderilirken bir hata oluştu: {str(e)}", 'error')
-
-    return redirect(url_for('result'))
+        return jsonify({
+            'success': False,
+            'message': f'Başvuru gönderilirken bir hata oluştu: {str(e)}'
+        })
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

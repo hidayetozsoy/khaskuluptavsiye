@@ -13,6 +13,18 @@
 </head>
 <body class="bg-light">
     <div class="container mt-5">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <h1 class="page-title">Size Önerilen Kulüpler</h1>
         <p class="page-subtitle">Aşağıda size önerilen kulüpler listelenmiştir</p>
 
@@ -69,11 +81,56 @@
         document.addEventListener('DOMContentLoaded', function() {
             const applyButtons = document.querySelectorAll('.apply-btn');
             const selectedClubInput = document.getElementById('selectedClub');
+            const emailModal = document.getElementById('emailModal');
+            const emailForm = document.getElementById('emailForm');
             
             applyButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const club = this.getAttribute('data-club');
                     selectedClubInput.value = club;
+                });
+            });
+
+            // Handle form submission
+            emailForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Close the modal
+                        const modal = bootstrap.Modal.getInstance(emailModal);
+                        modal.hide();
+                        
+                        // Show success message
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = 'alert alert-success alert-dismissible fade show';
+                        alertDiv.innerHTML = `
+                            ${data.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        `;
+                        document.querySelector('.container').insertBefore(alertDiv, document.querySelector('.page-title'));
+                        
+                        // Clear the form
+                        emailForm.reset();
+                    } else {
+                        // Show error message
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+                        alertDiv.innerHTML = `
+                            ${data.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        `;
+                        document.querySelector('.container').insertBefore(alertDiv, document.querySelector('.page-title'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
             });
         });
