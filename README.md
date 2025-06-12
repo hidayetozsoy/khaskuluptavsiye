@@ -79,4 +79,4 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosy
 
 Proje Sahibi - [@hidayetozsoy](https://github.com/hidayetozsoy) - [@hidayetozsoy](https://github.com/hidayetozsoy) - [@hidayetozsoy](https://github.com/hidayetozsoy)
 
-Proje Linki: [https://github.com/hidayetozsoy/khaskuluptavsiye](https://github.com/your-username/khaskuluptavsiye) 
+Proje Linki: [https://github.com/hidayetozsoy/khaskuluptavsiye](https://github.com/hidayetozsoy/khaskuluptavsiye) 
